@@ -16,8 +16,14 @@ env:
 jobs:
   build:
     runs-on: ubuntu-20.04
+
+    strategy:
+      matrix:
+        source: [release, continuous]
+
     permissions:
       contents: write
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -34,7 +40,7 @@ jobs:
           wget $APPIMAGE_BUILDER_URL -O appimage-builder
           chmod +x appimage-builder
 
-      - name: Download source code
+      - name: Download latest release
         run: |
           cd $BUILD_DIR
           TAG_NAME=$(curl -s https://api.github.com/repos/SAOImageDS9/SAOImageDS9/releases/latest | jq -r .tag_name)
@@ -43,6 +49,17 @@ jobs:
           mkdir -p ds9
           tar -zxf ds9.tar.gz -C ds9 --strip-components=1
           echo "VERSION=$(echo $TAG_NAME | sed 's/v//')" | tee -a $GITHUB_ENV
+        if: ${{ matrix.source }} == 'release'
+
+      - name: Download master branch
+        run: |
+          cd $BUILD_DIR
+          wget https://github.com/SAOImageDS9/SAOImageDS9/archive/refs/heads/master.tar.gz -O ds9.tar.gz
+
+          mkdir -p ds9
+          tar -zxf ds9.tar.gz -C ds9 --strip-components=1
+          echo "VERSION=continuous-build" | tee -a $GITHUB_ENV
+        if: ${{ matrix.source }} == 'continuous'
 
       - name: Build program
         run: |
@@ -67,8 +84,20 @@ jobs:
       - name: List files
         run: ls -R $BUILD_DIR
 
-      - uses: ncipollo/release-action@v1
+      - name: Upload new release
+        uses: ncipollo/release-action@v1
         with:
           tag: v${{ env.VERSION }}
           artifacts: '${{ env.BUILD_DIR }}/SAOImageDS9-*'
           artifactErrorsFailBuild: true
+        if: ${{ matrix.source }} == 'release'
+
+      - name: Update continuous build
+        uses: ncipollo/release-action@v1
+        with:
+          name: 'Continuous build'
+          tag: ${{ env.VERSION }}
+          prerelease: true
+          artifacts: '${{ env.BUILD_DIR }}/SAOImageDS9-*'
+          artifactErrorsFailBuild: true
+        if: ${{ matrix.source }} == 'continuous'
