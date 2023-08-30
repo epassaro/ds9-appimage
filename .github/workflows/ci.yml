@@ -1,0 +1,74 @@
+name: ci
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - 'README.md'
+  schedule:
+    - cron: '0 0 * * 3'
+
+env:
+  APPIMAGE_BUILDER_URL: 'https://github.com/AppImageCrafters/appimage-builder/releases/download/v1.0.3/appimage-builder-1.0.3-x86_64.AppImage'
+  BUILD_DIR: /tmp/build
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install build dependencies
+        run: |
+          sudo apt update
+          sudo apt install automake autoconf libx11-dev zlib1g-dev \
+                           libxml2-dev libxslt1-dev libxft-dev zip
+
+      - name: Download appimage-builder
+        run: |
+          mkdir -p $BUILD_DIR && cd $BUILD_DIR
+          wget $APPIMAGE_BUILDER_URL -O appimage-builder
+          chmod +x appimage-builder
+
+      - name: Download source code
+        run: |
+          cd $BUILD_DIR
+          TAG_NAME=$(curl -s https://api.github.com/repos/SAOImageDS9/SAOImageDS9/releases/latest | jq -r .tag_name)
+          wget https://github.com/SAOImageDS9/SAOImageDS9/archive/refs/tags/$TAG_NAME.tar.gz -O ds9.tar.gz
+
+          mkdir -p ds9
+          tar -zxf ds9.tar.gz -C ds9 --strip-components=1
+          echo "VERSION=$(echo $TAG_NAME | sed 's/v//')" | tee -a $GITHUB_ENV
+
+      - name: Update YAML
+        run: |
+          cp AppImageBuilder.yml $BUILD_DIR
+          cd $BUILD_DIR
+          yq -i '.AppDir.app_info.version = strenv(VERSION)' AppImageBuilder.yml
+          cat AppImageBuilder.yml
+
+      - name: Build program
+        run: |
+          cd $BUILD_DIR/ds9
+          ./unix/configure
+          make
+
+      - name: Create AppImage
+        run: |
+          cd $BUILD_DIR
+          mkdir -p AppDir/usr/bin
+          cp ds9/bin/* AppDir/usr/bin
+          ./appimage-builder --recipe AppImageBuilder.yml
+
+      - name: List files
+        run: ls -R $BUILD_DIR
+
+      - uses: ncipollo/release-action@v1
+        with:
+          tag: v${{ env.VERSION }}
+          artifacts: '${{ env.BUILD_DIR }}/SAOImageDS9-*'
+          artifactErrorsFailBuild: true
