@@ -44,18 +44,18 @@ jobs:
           tar -zxf ds9.tar.gz -C ds9 --strip-components=1
           echo "VERSION=$(echo $TAG_NAME | sed 's/v//')" | tee -a $GITHUB_ENV
 
-      - name: Update YAML
-        run: |
-          cp AppImageBuilder.yml $BUILD_DIR
-          cd $BUILD_DIR
-          yq -i '.AppDir.app_info.version = strenv(VERSION)' AppImageBuilder.yml
-          cat AppImageBuilder.yml
-
       - name: Build program
         run: |
           cd $BUILD_DIR/ds9
           ./unix/configure
           make
+
+      - name: Update YAML
+        run: |
+          cp AppImageBuilder.yml $BUILD_DIR
+          cd $BUILD_DIR
+          yq -i '.AppDir.app_info.version = strenv(VERSION)' AppImageBuilder.yml
+          cat AppImageBuilder.yml  
 
       - name: Create AppImage
         run: |
