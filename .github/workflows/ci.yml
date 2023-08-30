@@ -6,8 +6,11 @@ on:
       - main
     paths-ignore:
       - 'README.md'
+
   schedule:
     - cron: '0 0 * * 3'
+
+  workflow_dispatch:  # manual trigger
 
 env:
   APPIMAGE_BUILDER_URL: 'https://github.com/AppImageCrafters/appimage-builder/releases/download/v1.0.3/appimage-builder-1.0.3-x86_64.AppImage'
