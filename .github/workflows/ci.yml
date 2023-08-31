@@ -103,6 +103,10 @@ jobs:
           allowUpdates: true
           artifacts: '${{ env.BUILD_DIR }}/SAOImageDS9-*'
           artifactErrorsFailBuild: true
+          body: |
+            This AppImage has been created through a continuous delivery pipeline.
+
+            See the [code release](https://github.com/SAOImageDS9/SAOImageDS9/releases/tag/v${{ env.VERSION }}) for a list of fixes and features.
         if: ${{ matrix.source == 'release' }}
 
       - name: Update continuous build
@@ -114,4 +118,8 @@ jobs:
           allowUpdates: true
           artifacts: '${{ env.BUILD_DIR }}/SAOImageDS9-*'
           artifactErrorsFailBuild: true
+          body: |
+            This AppImage has been created and released through a continuous delivery pipeline.
+
+            Pre-release is up-to-date with the [source code](https://github.com/SAOImageDS9/SAOImageDS9) master branch.
         if: ${{ matrix.source == 'continuous' }}
