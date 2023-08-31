@@ -46,24 +46,27 @@ jobs:
       - name: Download latest release
         run: |
           cd $BUILD_DIR
-          TAG_NAME=$(curl -s https://api.github.com/repos/SAOImageDS9/SAOImageDS9/releases/latest | jq -r .tag_name)
-          wget https://github.com/SAOImageDS9/SAOImageDS9/archive/refs/tags/$TAG_NAME.tar.gz -O ds9.tar.gz
+          wget $(curl -s $URL | jq -r .tarball_url) -O ds9.tar.gz
 
           mkdir -p ds9
           tar -zxf ds9.tar.gz -C ds9 --strip-components=1
-          echo "VERSION=$(echo $TAG_NAME | sed 's/v//')" | tee -a $GITHUB_ENV
+          echo "VERSION=$(echo $(curl -s $URL | jq -r .tag_name) | sed 's/v//')" | tee -a $GITHUB_ENV
           echo "UPDATE_INFO=gh-releases-zsync|epassaro|ds9-appimage|latest|SAOImageDS9-*x86_64.AppImage.zsync" | tee -a $GITHUB_ENV
+        env:
+          URL: 'https://api.github.com/repos/SAOImageDS9/SAOImageDS9/releases/latest'
         if: ${{ matrix.source == 'release' }}
 
       - name: Download master branch
         run: |
           cd $BUILD_DIR
-          wget https://github.com/SAOImageDS9/SAOImageDS9/archive/refs/heads/master.tar.gz -O ds9.tar.gz
+          wget $URL -O ds9.tar.gz
 
           mkdir -p ds9
           tar -zxf ds9.tar.gz -C ds9 --strip-components=1
           echo "VERSION=continuous" | tee -a $GITHUB_ENV
           echo "UPDATE_INFO=gh-releases-zsync|epassaro|ds9-appimage|continuous|SAOImageDS9-*x86_64.AppImage.zsync" | tee -a $GITHUB_ENV
+        env:
+          URL: 'https://github.com/SAOImageDS9/SAOImageDS9/archive/refs/heads/master.tar.gz'
         if: ${{ matrix.source == 'continuous' }}
 
       - name: Build program
