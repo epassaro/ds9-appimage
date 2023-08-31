@@ -62,10 +62,8 @@ jobs:
 
           mkdir -p ds9
           tar -zxf ds9.tar.gz -C ds9 --strip-components=1
-          echo "VERSION=continuous-build" | tee -a $GITHUB_ENV
-          echo "UPDATE_INFO=zsync|$ZSYNC_URL" | tee -a $GITHUB_ENV
-        env:
-          ZSYNC_URL: 'https://github.com/epassaro/ds9-appimage/releases/download/continuous-build/SAOImageDS9-continuous-build-x86_64.AppImage.zsync'
+          echo "VERSION=continuous" | tee -a $GITHUB_ENV
+          echo "UPDATE_INFO=gh-releases-zsync|epassaro|ds9-appimage|continuous|SAOImageDS9-*x86_64.AppImage.zsync" | tee -a $GITHUB_ENV
         if: ${{ matrix.source == 'continuous' }}
 
       - name: Build program
