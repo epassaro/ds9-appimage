@@ -3,7 +3,7 @@ version: 1
 AppDir:
   path: /tmp/build/AppDir
   app_info:
-    id: org.SAOImage.DS9
+    id: com.github.SAOImageDS9.SAOImageDS9
     name: SAOImageDS9
     icon: ds9
     version:
