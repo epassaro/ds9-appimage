@@ -89,7 +89,8 @@ jobs:
           cd $BUILD_DIR
           mkdir -p AppDir/usr/bin
           mkdir -p AppDir/usr/share/icons/hicolor/128x128/apps
-          cp ds9/bin/* AppDir/usr/bin
+          #cp ds9/bin/* AppDir/usr/bin
+          cp ds9/bin/ds9 AppDir/usr/bin
           cp ds9.png AppDir/usr/share/icons/hicolor/128x128/apps
           ./appimage-builder --recipe AppImageBuilder.yml
 
