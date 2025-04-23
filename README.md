@@ -10,6 +10,12 @@ This repository uses GitHub Actions to make weekly AppImage builds of [SAOImage 
 ## Installation
 Download an AppImage from the [releases section](https://github.com/epassaro/ds9-appimage/releases), make it executable, and run.
 
+Newer Ubuntu systems may require the _libfuse2_ library:
+
+```bash
+$ sudo apt install libfuse2
+```
+
 ## Motivation
 I began this project primarily for research purposes because I've been wanting to learn how to distribute software in the AppImage format for a while. 
 
