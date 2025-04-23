@@ -35,7 +35,8 @@ jobs:
         run: |
           sudo apt update
           sudo apt install automake autoconf libx11-dev zlib1g-dev \
-                           libxml2-dev libxslt1-dev libxft-dev zip
+                           libxml2-dev libxslt1-dev libxft-dev zip \
+                           libfuse2
 
       - name: Download appimage-builder
         run: |
