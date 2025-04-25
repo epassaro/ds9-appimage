@@ -123,5 +123,5 @@ jobs:
           body: |
             This AppImage has been created and released through a continuous delivery pipeline.
 
-            Pre-release is up-to-date with the [source code](https://github.com/SAOImageDS9/SAOImageDS9) master branch.
+            This release is up-to-date with the [source code](https://github.com/SAOImageDS9/SAOImageDS9) master branch.
         if: ${{ matrix.source == 'continuous' }}
