@@ -5,7 +5,9 @@ Builds of SAOImage DS9 in the AppImage format
 This repository uses GitHub Actions to make weekly AppImage builds of [SAOImage DS9](https://github.com/SAOImageDS9/SAOImageDS9) in two variants:
 
 - [Latest tag](https://github.com/epassaro/ds9-appimage/releases/latest)
-- [Continuous build](https://github.com/epassaro/ds9-appimage/releases/tag/continuous) (pre-release)
+- [Continuous build](https://github.com/epassaro/ds9-appimage/releases/tag/continuous)
+
+> NOTE: This project does not build beta versions of DS9
 
 ## Installation
 Download an AppImage from the [releases section](https://github.com/epassaro/ds9-appimage/releases), make it executable, and run.
