@@ -25,3 +25,4 @@ I decided to start with DS9 because it's a piece of software I'm familiar with, 
 
 ## See also
 - [ds9-flatpak](https://github.com/epassaro/ds9-flatpak) - My Flatpak recipe for DS9
+- [ds9-feedstock](https://github.com/conda-forge/ds9-feedstock) - My conda-forge recipe for DS9
