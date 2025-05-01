@@ -24,5 +24,6 @@ I began this project primarily for research purposes because I've been wanting t
 I decided to start with DS9 because it's a piece of software I'm familiar with, and it's relatively easy to build.
 
 ## See also
+- [PackagingLab](https://epassaro.github.io/packaginglab) - Project website 
 - [ds9-flatpak](https://github.com/epassaro/ds9-flatpak) - My Flatpak recipe for DS9
-- [ds9-feedstock](https://github.com/conda-forge/ds9-feedstock) - My conda-forge recipe for DS9
+- [ds9-feedstock](https://github.com/conda-forge/ds9-feedstock) - My conda-forge recipe for DS
